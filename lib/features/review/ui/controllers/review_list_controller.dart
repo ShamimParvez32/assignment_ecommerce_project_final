@@ -27,9 +27,12 @@ class ReviewListController extends GetxController {
 
     if (response.isSuccess) {
       List<ReviewListModel> list = [];
-      for (Map<String, dynamic> json in response.responseData!['data']
-          ['results']) {
-        list.add(ReviewListModel.fromJson(json));
+      final results =
+          response.responseData!['data']['results'] as List<dynamic>?;
+      if (results != null) {
+        for (Map<String, dynamic> json in results) {
+          list.add(ReviewListModel.fromJson(json));
+        }
       }
       _reviewItemList = list;
       isSuccess = true;

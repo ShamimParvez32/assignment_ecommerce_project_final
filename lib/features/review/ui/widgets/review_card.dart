@@ -1,18 +1,14 @@
 import 'package:assignment_ecommerce_project_final/features/review/data/models/review_list_model.dart';
 import 'package:flutter/material.dart';
 
-class reviewCard extends StatefulWidget {
-  const reviewCard({
+class ReviewCard extends StatelessWidget {
+  const ReviewCard({
     super.key,
     required this.reviewItem,
   });
 
   final ReviewListModel reviewItem;
-  @override
-  State<reviewCard> createState() => _reviewCardState();
-}
 
-class _reviewCardState extends State<reviewCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,31 +28,62 @@ class _reviewCardState extends State<reviewCard> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-              backgroundColor: Colors.grey,
-              child: const Icon(Icons.person, size: 40, color: Colors.white)),
+          const CircleAvatar(
+            backgroundColor: Colors.grey,
+            child: Icon(Icons.person, size: 40, color: Colors.white),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(widget.reviewItem.firstName,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
-                    const SizedBox(width: 8),
-                    Text(widget.reviewItem.lastName,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
-                    const SizedBox(height: 6),
+                    // User name with null safety
+                    Text(
+                      '${reviewItem.firstName} ${reviewItem.lastName}',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+
+                    // Rating with null safety
+                    Row(
+                      children: [
+                        const Icon(Icons.star, color: Colors.amber, size: 16),
+                        const SizedBox(width: 4),
+                        Text(
+                          reviewItem.rating?.toString() ?? '0.0',
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
+                const SizedBox(height: 8),
+
+                // Review text with null safety
                 Text(
-                  widget.reviewItem.review,
+                  reviewItem.review ?? 'No review text',
                   style: const TextStyle(
-                      color: Colors.grey, fontSize: 14, height: 1.4),
+                    color: Colors.grey,
+                    fontSize: 14,
+                    height: 1.4,
+                  ),
                 ),
+
+                // Product name with null safety
+                if (reviewItem.productModel?.title != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(
+                      'For: ${reviewItem.productModel!.title}',
+                      style: const TextStyle(
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.blueGrey),
+                    ),
+                  ),
               ],
             ),
           ),

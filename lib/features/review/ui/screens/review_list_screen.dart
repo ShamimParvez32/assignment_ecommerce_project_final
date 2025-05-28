@@ -56,7 +56,7 @@ class _ReviewListScreenState extends State<ReviewListScreen> {
                 itemCount: controller.reviewItemList.length,
                 itemBuilder: (context, index) {
                   ReviewListModel reviewItem = controller.reviewItemList[index];
-                  return reviewCard(reviewItem: reviewItem);
+                  return ReviewCard(reviewItem: reviewItem);
                 },
               ),
             ),
