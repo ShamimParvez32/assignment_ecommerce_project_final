@@ -10,6 +10,7 @@ import 'package:assignment_ecommerce_project_final/features/products/ui/widgets/
 import 'package:assignment_ecommerce_project_final/features/products/ui/widgets/increment_decrement_counter_widget.dart';
 import 'package:assignment_ecommerce_project_final/features/products/ui/widgets/product_image_carousel_slider.dart';
 import 'package:assignment_ecommerce_project_final/features/products/ui/widgets/size_picker.dart';
+import 'package:assignment_ecommerce_project_final/features/wishlist/ui/screens/wish_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -106,7 +107,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             onTap: () {
                                               if (controller
                                                   .product.id.isNotEmpty) {
-                                                // ADD: null check
                                                 Navigator.pushNamed(
                                                   context,
                                                   ReviewListScreen.name,
@@ -125,17 +125,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                     decoration: TextDecoration
                                                         .underline)),
                                           ),
-                                          Card(
-                                            color: AppColors.themeColor,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                            child: const Padding(
-                                              padding: EdgeInsets.all(4.0),
-                                              child: Icon(
-                                                Icons.favorite_border,
-                                                size: 16,
-                                                color: Colors.white,
+                                          // Wrap the favorite icon with GestureDetector
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.pushNamed(
+                                                context,
+                                                WishlistScreen.name,
+                                              );
+                                            },
+                                            child: Card(
+                                              color: AppColors.themeColor,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(4)),
+                                              child: const Padding(
+                                                padding: EdgeInsets.all(4.0),
+                                                child: Icon(
+                                                  Icons.favorite_border,
+                                                  size: 16,
+                                                  color: Colors.white,
+                                                ),
                                               ),
                                             ),
                                           )
