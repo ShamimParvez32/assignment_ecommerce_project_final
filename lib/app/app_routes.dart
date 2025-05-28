@@ -9,6 +9,7 @@ import 'package:assignment_ecommerce_project_final/features/products/ui/screens/
 import 'package:assignment_ecommerce_project_final/features/products/ui/screens/product_list_screen.dart';
 import 'package:assignment_ecommerce_project_final/features/review/ui/screens/create_review_screen.dart';
 import 'package:assignment_ecommerce_project_final/features/review/ui/screens/review_list_screen.dart';
+import 'package:assignment_ecommerce_project_final/features/wishlist/ui/screens/wish_list_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
@@ -40,6 +41,8 @@ class AppRoutes {
     } else if (settings.name == CreateReviewScreen.name) {
       final productId = settings.arguments as String? ?? ''; // NULL SAFETY
       route = CreateReviewScreen(productId: productId);
+    } else if (settings.name == WishlistScreen.name) {
+      route = const WishlistScreen();
     }
 
     return MaterialPageRoute(

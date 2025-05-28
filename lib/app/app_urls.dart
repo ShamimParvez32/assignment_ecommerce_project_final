@@ -16,4 +16,6 @@ class AppUrls {
       '$_baseUrl/products/id/$productId';
 
   static const String addToCartUrl = '$_baseUrl/cart';
+  static const String wishlistUrl = '$_baseUrl/wishlist';
+  static String deleteFromWishlistUrl(String id) => '$_baseUrl/wishlist/$id';
 }

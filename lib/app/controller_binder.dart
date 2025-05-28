@@ -9,6 +9,7 @@ import 'package:assignment_ecommerce_project_final/features/common/controllers/h
 import 'package:assignment_ecommerce_project_final/features/common/controllers/main_bottom_nav_bar_controller.dart';
 import 'package:assignment_ecommerce_project_final/features/review/ui/controllers/create_review_controller.dart';
 import 'package:assignment_ecommerce_project_final/features/review/ui/controllers/review_list_controller.dart';
+import 'package:assignment_ecommerce_project_final/features/wishlist/ui/controllers/wish_list_controller.dart';
 import 'package:get/get.dart';
 
 class ControllerBinder extends Bindings {
@@ -24,6 +25,7 @@ class ControllerBinder extends Bindings {
     Get.put(VerifyOtpController());
     Get.put(CartListController());
     Get.put(ReviewListController());
+    Get.put(WishlistController());
     Get.put(CreateReviewController());
   }
 }

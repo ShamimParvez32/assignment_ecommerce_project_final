@@ -1,67 +1,31 @@
-class WishlistItem {
+// wishlist_model.dart
+class WishlistModel {
   final String id;
-  final String userId;
-  final Product product;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final String productId;
+  final String title;
+  final int price;
+  final double rating;
+  final String imageUrl;
 
-  WishlistItem({
+  WishlistModel({
     required this.id,
-    required this.userId,
-    required this.product,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory WishlistItem.fromJson(Map<String, dynamic> json) {
-    return WishlistItem(
-      id: json['_id'],
-      userId: json['user'],
-      product: Product.fromJson(json['product']),
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'user': userId,
-      'product': product.toJson(),
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-    };
-  }
-}
-
-class Product {
-  final String id;
-  final String name;
-  final double price;
-  final String image;
-
-  Product({
-    required this.id,
-    required this.name,
+    required this.productId,
+    required this.title,
     required this.price,
-    required this.image,
+    required this.rating,
+    required this.imageUrl,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
+  factory WishlistModel.fromJson(Map<String, dynamic> json) {
+    return WishlistModel(
       id: json['_id'],
-      name: json['name'],
-      price: (json['price'] as num).toDouble(),
-      image: json['image'],
+      productId: json['product']['_id'],
+      title: json['product']['title'],
+      price: json['product']['current_price'],
+      rating: json['product']['rating']?.toDouble() ?? 0.0,
+      imageUrl: json['product']['photos']?.isNotEmpty == true
+          ? json['product']['photos'][0]
+          : '',
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'name': name,
-      'price': price,
-      'image': image,
-    };
   }
 }

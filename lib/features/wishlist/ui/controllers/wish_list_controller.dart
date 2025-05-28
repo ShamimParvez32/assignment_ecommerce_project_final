@@ -1,89 +1,69 @@
+// wishlist_controller.dart
 import 'package:assignment_ecommerce_project_final/app/app_urls.dart';
 import 'package:assignment_ecommerce_project_final/core/network_caller/network_caller.dart';
-import 'package:assignment_ecommerce_project_final/features/cart/data/models/cart_item_model.dart';
+import 'package:assignment_ecommerce_project_final/features/wishlist/data/models/wish_list_model.dart';
 import 'package:get/get.dart';
 
-class CartListController extends GetxController {
-  bool _getCartListInProgress = false;
+class WishlistController extends GetxController {
+  final NetworkCaller _networkCaller = Get.find<NetworkCaller>();
 
-  bool _removeFromCartListInProgress = false;
+  bool _getWishlistInProgress = false;
+  bool get getWishlistInProgress => _getWishlistInProgress;
+
+  List<WishlistModel> _wishlistItems = [];
+  List<WishlistModel> get wishlistItems => _wishlistItems;
 
   String? _errorMessage;
-
   String? get errorMessage => _errorMessage;
 
-  String? _removeFromCartErrorMessage;
-
-  String? get removeFromCartErrorMessage => _removeFromCartErrorMessage;
-
-  List<CartItemModel> _cartItemList = [];
-
-  List<CartItemModel> get cartItemList => _cartItemList;
-
-  bool get getCartListInProgress => _getCartListInProgress;
-
-  bool get removeFromCartListInProgress => _removeFromCartListInProgress;
-
-  Future<bool> getCartList() async {
-    bool isSuccess = false;
-    _getCartListInProgress = true;
+  Future<bool> getWishlist() async {
+    _getWishlistInProgress = true;
     update();
-    final NetworkResponse response = await Get.find<NetworkCaller>().getRequest(
-      url: AppUrls.cartListUrl,
-    );
+
+    final response = await _networkCaller.getRequest(url: AppUrls.wishlistUrl);
+    _getWishlistInProgress = false;
 
     if (response.isSuccess) {
-      List<CartItemModel> list = [];
-      for (Map<String, dynamic> json in response.responseData!['data']
-          ['results']) {
-        list.add(CartItemModel.fromJson(json));
+      _wishlistItems = [];
+      for (var item in response.responseData!['data']) {
+        _wishlistItems.add(WishlistModel.fromJson(item));
       }
-      _cartItemList = list;
-      isSuccess = true;
+      _errorMessage = null;
+      update();
+      return true;
     } else {
       _errorMessage = response.errorMessage;
+      update();
+      return false;
     }
-
-    _getCartListInProgress = false;
-    update();
-    return isSuccess;
   }
 
-  void updateProduct(String cartId, int quantity) {
-    // Normal api call
-    for (CartItemModel cartItem in _cartItemList) {
-      if (cartItem.id == cartId) {
-        cartItem.quantity = quantity;
-        break;
-      }
-    }
-    update();
-  }
-
-  Future<bool> removeFromCart(String cartId) async {
-    bool isSuccess = false;
-    _removeFromCartListInProgress = true;
-    update();
-    final NetworkResponse response =
-        await Get.find<NetworkCaller>().deleteRequest(
-      url: AppUrls.deleteFromCartListUrl(cartId),
+  Future<bool> addToWishlist(String productId) async {
+    final response = await _networkCaller.postRequest(
+      url: AppUrls.wishlistUrl,
+      body: {'product': productId},
     );
+
     if (response.isSuccess) {
-      _cartItemList.removeWhere((e) => e.id == cartId);
-      isSuccess = true;
+      // Refresh wishlist after adding
+      getWishlist();
+      return true;
     } else {
-      _removeFromCartErrorMessage = response.errorMessage;
+      return false;
     }
-    _removeFromCartListInProgress = false;
-    update();
-    return isSuccess;
   }
 
-  int get totalPrice {
-    int total = 0;
-    for (CartItemModel cartItem in _cartItemList) {
-      total += (cartItem.productModel.currentPrice * cartItem.quantity);
+  Future<bool> removeFromWishlist(String wishlistItemId) async {
+    final response = await _networkCaller.deleteRequest(
+      url: AppUrls.deleteFromWishlistUrl(wishlistItemId),
+    );
+
+    if (response.isSuccess) {
+      // Refresh wishlist after removal
+      getWishlist();
+      return true;
+    } else {
+      return false;
     }
-    return total;
   }
 }
